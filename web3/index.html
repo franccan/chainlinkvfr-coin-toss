@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <style>
+input[type=checkbox] {
+    transform: scale(1.5);
+   
+    margin:10px;
+}
+#inputDepositFunds {
+    -moz-appearance: textfield;
+    -webkit-appearance: textfield;
+    background-color: white;
+    background-color: -moz-field;
+    border: 1px solid rgb(80, 80, 80);
+    box-shadow: 1px 1px 1px 0 lightgray inset;  
+    font: -moz-field;
+    font: -webkit-small-control;
+    padding: 15px 30px;
+    margin: 5px 5px;
+    width: 200px;    
+}
+#inputWithdrawFunds {
+    -moz-appearance: textfield;
+    -webkit-appearance: textfield;
+    background-color: white;
+    background-color: -moz-field;
+    border: 1px solid rgb(80, 80, 80);
+    box-shadow: 1px 1px 1px 0 lightgray inset;  
+    font: -moz-field;
+    font: -webkit-small-control;
+    padding: 15px 30px;
+    margin: 5px 5px;
+    width: 200px;    
+}
+
+#inputPlay {
+    -moz-appearance: textfield;
+    -webkit-appearance: textfield;
+    background-color: white;
+    background-color: -moz-field;
+    border: 1px solid rgb(80, 80, 80);
+    box-shadow: 1px 1px 1px 0 lightgray inset;  
+    font: -moz-field;
+    font: -webkit-small-control;
+    padding: 15px 30px;
+    margin: 5px 5px;
+    width: 200px;    
+}
+#inputFee {
+    -moz-appearance: textfield;
+    -webkit-appearance: textfield;
+    background-color: rgb(221, 221, 221);
+    background-color: -moz-field;
+    border: 1px solid rgb(206, 206, 206);
+    box-shadow: 1px 1px 1px 0 lightgray inset;  
+    font: -moz-field;
+    font: -webkit-small-control;
+    padding: 15px 30px;
+    margin: 5px 5px;
+    width: 200px;    
+}
+
+#gameTable {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 600px;
+}
+
+#gameTable td, #gameTable th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#gameTable tr:nth-child(even){background-color: #f2f2f2;}
+
+
+#gameTable th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #04AA6D;
+  color: white;
+}
+
+        .buttonDepositFunds {
+          background-color: #ff0000;
+          border: none;
+          color: white;
+          padding: 15px 30px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          margin: 5px 5px;
+          cursor: pointer;
+          width: 200px;
+        }
+        .buttonWithdrawFunds {
+          background-color: #0000ff;
+          border: none;
+          color: white;
+          padding: 15px 30px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          margin: 5px 5px;
+          cursor: pointer;
+          width: 200px;
+        }
+        .buttonGuessNumber {
+          background-color: #008200;
+          border: none;
+          color: white;
+          padding: 15px 32px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          margin: 4px 2px;
+          cursor: pointer;
+          width: 200px;
+        }
+        </style>
+        
+    <script
+      src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
+      type="application/javascript"
+    ></script>
+
+    <script src="index.js"></script>
+
+  </head>
+  <body>
+
+    <h1>Play</h1>
+    <table id="gameTable">
+        <tr>
+            <td colspan="2"> <div id="account">Connected account:  0x...</div></td>
+        </tr>
+        
+        <tr>
+            <td width="50%">
+                
+                <div id="balance">Balance: ... MATIC</div>
+
+                <div id="inputDepositFunds" contenteditable>0.0</div>
+                <div class="buttonDepositFunds" id="depositFunds">DEPOSIT MATIC</div>
+
+                <div id="inputWithdrawFunds" contenteditable>0.0</div>
+                <div class="buttonWithdrawFunds" id="withdrawFunds">WITHDRAW MATIC</div>
+
+            </td>
+            <td>        
+                <div id="bettingBox"> 
+                <div>
+                    <input type="checkbox" id="heads1Checkbox"> 
+                    <label for="heads1Checkbox">Heads(1)</label> 
+                </div>
+                <div>
+                    <input type="checkbox" id="tails2Checkbox"> 
+                    <label for="tails2Checkbox">Tails(2)</label> 
+                </div>
+               
+                <div id="inputPlay" contenteditable>0.0</div>
+                <div id="inputFee"><i>Fixed fee: 0.02 MATIC</i></div>
+                <div class="buttonGuessNumber" id="guessNumber">GO!</div>
+              </div>
+              <div id="bettingBoxProcessing" style="display: none;">&nbsp;</div>
+            </td>
+        </tr>
+    </table>
+
+    <h1>Stats</h1>
+    
+    <table width="50%">
+        <tr>
+            <td>
+                <div id="wins">Global wins: ...</div>
+                <div id="losses">Global losses: ...</div>
+                <div id="contractBalance">Contract balance: ...</div>
+            </td>
+        </tr>
+    </table>
+
+  
+
+
+  </body>
+</html>
