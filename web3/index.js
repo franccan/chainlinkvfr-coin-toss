@@ -377,7 +377,7 @@ async function initWeb3() {
       console.log("Chainlink VRF randomness->", ethers.utils.formatUnits ( tx.randomness , 0));
       console.log("Chainlink VRF randomness mod 2 ->",ethers.utils.formatUnits(tx.randomness.mod(2),0));
       console.log("Chainlink VRF randomness mod 2 + 1->",Number(ethers.utils.formatUnits(tx.randomness.mod(2),0))+1);
-      console.log("isWin:", Number(ethers.utils.formatUnits(tx.randomness.mod(2),0))+1 + 1 == tx.numberToGuess );
+      console.log("isWin:", Number(ethers.utils.formatUnits(tx.randomness.mod(2),0))+1 == tx.numberToGuess );
       
       Number(ethers.utils.formatUnits(tx.randomness.mod(2),0))+1 == tx.numberToGuess ?  alert("You Won!") : alert("You Lost, try again!");
       document.getElementById("bettingBox").style.display = "block";
