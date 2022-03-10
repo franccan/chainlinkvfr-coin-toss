@@ -1,10 +1,14 @@
+// Constants
+
 MSG_PROCESSING = "<p align=\"center\"><i>Processing transaction on the Polygon blockchain using Chainlink VRF. <br><br>Please wait ~20 seconds</i></p>"
 MSG_SIGN = "<p align=\"center\">Please sign the transaction using Metamask</p>"
 MSG_WIN = "<p align=\"center\">You Won!</p>"
 MSG_LOSE = "<p align=\"center\">You Lost. Better luck next time.</p>"
 
- CONTRACT = "0x60fbe0a615eAC5452dbAe964AdeAD1Fcd21c74Fe"
- ABI = [
+// The contract address and ABI 
+
+CONTRACT = "0xd83649896c5846dA5d2aF695a850d137eB1254Ea"
+ABI = [
   {
     "inputs": [],
     "stateMutability": "nonpayable",
@@ -71,7 +75,8 @@ MSG_LOSE = "<p align=\"center\">You Lost. Better luck next time.</p>"
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
@@ -90,7 +95,8 @@ MSG_LOSE = "<p align=\"center\">You Lost. Better luck next time.</p>"
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [],
@@ -103,7 +109,8 @@ MSG_LOSE = "<p align=\"center\">You Lost. Better luck next time.</p>"
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [],
@@ -116,7 +123,8 @@ MSG_LOSE = "<p align=\"center\">You Lost. Better luck next time.</p>"
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
@@ -153,7 +161,8 @@ MSG_LOSE = "<p align=\"center\">You Lost. Better luck next time.</p>"
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [],
@@ -166,7 +175,8 @@ MSG_LOSE = "<p align=\"center\">You Lost. Better luck next time.</p>"
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [],
@@ -179,7 +189,8 @@ MSG_LOSE = "<p align=\"center\">You Lost. Better luck next time.</p>"
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [],
@@ -192,7 +203,8 @@ MSG_LOSE = "<p align=\"center\">You Lost. Better luck next time.</p>"
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
@@ -211,7 +223,8 @@ MSG_LOSE = "<p align=\"center\">You Lost. Better luck next time.</p>"
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [],
@@ -224,7 +237,8 @@ MSG_LOSE = "<p align=\"center\">You Lost. Better luck next time.</p>"
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
@@ -248,7 +262,8 @@ MSG_LOSE = "<p align=\"center\">You Lost. Better luck next time.</p>"
       }
     ],
     "stateMutability": "payable",
-    "type": "function"
+    "type": "function",
+    "payable": true
   },
   {
     "inputs": [
@@ -261,14 +276,16 @@ MSG_LOSE = "<p align=\"center\">You Lost. Better luck next time.</p>"
     "name": "withdrawFunds",
     "outputs": [],
     "stateMutability": "payable",
-    "type": "function"
+    "type": "function",
+    "payable": true
   },
   {
     "inputs": [],
     "name": "depositFunds",
     "outputs": [],
     "stateMutability": "payable",
-    "type": "function"
+    "type": "function",
+    "payable": true
   },
   {
     "inputs": [],
@@ -281,58 +298,72 @@ MSG_LOSE = "<p align=\"center\">You Lost. Better luck next time.</p>"
       }
     ],
     "stateMutability": "view",
-    "type": "function"
+    "type": "function",
+    "constant": true
   }
 ];
 
 async function initWeb3() {
-
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
-
-    await provider.send("eth_requestAccounts", []);
-    
-    const signer = provider.getSigner();
-    
-    const account = await signer.getAddress();
-
-    console.log("Account:",account);
-
-    const contract = new ethers.Contract(CONTRACT, ABI, provider);
-
-    const contractBalance =  ethers.utils.formatEther(await contract.getContractBalance()) ;
-    console.log("getContractBalance():", contractBalance);
-
-    const balance = ethers.utils.formatEther ( await contract.balances(account) , 18);
-    console.log(balance);
-
-    const contractWithSigner = await contract.connect(signer);
   
-    const wins = ethers.utils.formatUnits ( await contract.wins() , 0);
-    console.log("wins():", wins);
+  // New provider
+  const provider = new ethers.providers.Web3Provider(window.ethereum)
 
-    const losses = ethers.utils.formatUnits ( await contract.losses() , 0);
-    console.log("losses():", losses);
-
-    // Get all events for the current user
-
-    const filter = contract.filters.fulfillRandomnessEvent(account);
-    vrfEvents = await contract.queryFilter(filter, -500);
+  // Open a new window, get the user permission
+  await provider.send("eth_requestAccounts", []);
     
-    userTxs = [];
+  // New signer
+  const signer = provider.getSigner();
     
-    vrfEvents.forEach(async function(vrfEvent) {
+  // Get the account id from signer
+  const account = await signer.getAddress();
+  console.log("Account:",account);
 
-      vrfRequestId = await contract.requestIdToTx(vrfEvent.args.requestId);
+  // Define the contract
+  const contract = new ethers.Contract(CONTRACT, ABI, provider);
 
-      tx = await contract.TxToTxData(vrfRequestId);
+  //----///
+  
+  // getContractBalance() 
+  const contractBalance =  ethers.utils.formatEther(await contract.getContractBalance()) ;
+  console.log("getContractBalance():", contractBalance);
 
-      userTxs.push(tx);
+  // balances(account) 
+  const balance = ethers.utils.formatEther ( await contract.balances(account) , 18);
+  console.log("balances(account)",balance);
+  
+  // wins() 
+  const wins = ethers.utils.formatUnits ( await contract.wins() , 0);
+  console.log("wins():", wins);
 
-    });
+  // losses() 
+  const losses = ethers.utils.formatUnits ( await contract.losses() , 0);
+  console.log("losses():", losses);
 
-    console.log(userTxs);
+  // Link contract with singer
+  const contractWithSigner = await contract.connect(signer);
+  
+  // Get all events for the current user
+  const filter = contract.filters.fulfillRandomnessEvent(account);
+  vrfEvents = await contract.queryFilter(filter, -500);
 
-    contract.on(filter, async function(sender,requestId,event) {
+  userTxs = [];
+  vrfEvents.forEach(async function(vrfEvent) {
+    
+    // recover TX from requestId
+    vrfRequestId = await contract.requestIdToTx(vrfEvent.args.requestId);
+
+    // recover TX structure from TX
+    tx = await contract.TxToTxData(vrfRequestId);
+    
+    // fill userTxs
+    userTxs.push(tx);
+
+  });
+  // show userTxs
+  console.log(userTxs);
+
+  // Do stuff if a new event is detected
+  contract.on(filter, async function(sender,requestId,event) {
 
       console.log("sender->", sender);
       console.log("requestId->",requestId);
@@ -411,8 +442,12 @@ async function guessTheNumber(value, amount, contractWithSigner) {
 
 }
 
+// Start
+
 initWeb3().then(function(data){
 
+    // 1. Populate the GUI
+    
     var accountElement = document.getElementById("account");
     accountElement.innerHTML = "Connected account: " + data.accountData.accountId;
 
@@ -428,25 +463,28 @@ initWeb3().then(function(data){
     var lossesElement = document.getElementById("contractBalance");
     lossesElement.innerHTML = "Contract balance: " + data.contractData.contractBalance + " MATIC";
     
+    // 2. Define onclick() for depositFundsElement
     var depositFundsElement = document.getElementById("depositFunds");
     depositFundsElement.onclick = function(event) {
         
         var inputDepositFundsElement = document.getElementById("inputDepositFunds");
+        // depositFunds()
         depositFunds(data.contractData.signer,inputDepositFundsElement.innerHTML).then(function(tx){
             console.log(tx);
         });
     }
 
+    // 3. Define onclick() for inputWithdrawFunds
     var withdrawFundsElement = document.getElementById("withdrawFunds");
     withdrawFundsElement.onclick = function(event) {
         var inputWithdrawFundsElement = document.getElementById("inputWithdrawFunds");
+        // withdrawFunds()
         withdrawFunds(data.contractData.signer, inputWithdrawFundsElement.innerHTML).then(function(tx){
             console.log(tx);
         });
     }
 
-    // prevent both checkboxes to be on at the same time
-
+    // 4. Prevent both checkboxes to be on at the same time
     var heads1CheckboxElement = document.getElementById("heads1Checkbox");
     var tails2CheckboxElement = document.getElementById("tails2Checkbox");
     heads1CheckboxElement.onclick = function(event) {
@@ -461,7 +499,8 @@ initWeb3().then(function(data){
             heads1CheckboxElement.checked = false;
         }
      }
-
+     
+    // 5. Define onclick() for guessNumberElement
     var guessNumberElement = document.getElementById("guessNumber");
         guessNumberElement.onclick = function(event) {
         // hide all controls from user
@@ -482,8 +521,10 @@ initWeb3().then(function(data){
             value = "2"
         }
         document.getElementById("bettingBoxProcessing").innerHTML = MSG_SIGN;
+        // guessTheNumber()
         guessTheNumber(value,inputPlayElement.innerHTML,data.contractData.signer).then(function(result){
             
+            // Hide GUI
             if (Object.keys(result.err).length !== 0) {
               document.getElementById("bettingBoxProcessing").style.display = "none";
               document.getElementById("bettingBox").style.display = "block";
@@ -496,7 +537,5 @@ initWeb3().then(function(data){
          });
      }
  
-    
-    
 
 });
